@@ -1111,7 +1111,7 @@ class Environment:
                 self.delay = delay  # td
                 self.activation_factor = activation_factor
 
-            def apply_forces(self, system, time: np.float = 0.0):
+            def apply_forces(self, system, time: np.float64 = 0.0):
                 self._apply_activation(
                     time,
                     self.delay,

@@ -304,7 +304,7 @@ class OuterRingRingRodConnectionDifferentLevel(FreeJoint):
         distance = target_rod_two_position - current_rod_two_position
         # We may need to round distance because sometimes there is small error occur due to discreatization
         # error~1e-15
-        np.round_(distance, 12, distance)
+        np.round(distance, 12, distance)
 
         spring_force = k * distance
 

@@ -322,7 +322,7 @@ class MuscleFiberForceWaveActivation(NoForces):
         self.tau = time_constant
 
     def apply_forces(self, system, time: np.float64 = 0.0):
-        index = np.arange(0, system.n_elems, 1, dtype=np.int)[::-1]
+        index = np.arange(0, system.n_elems, 1, dtype=np.int64)[::-1]
         system.fiber_activation[:] = (
             self.activation_level
             * 0.5

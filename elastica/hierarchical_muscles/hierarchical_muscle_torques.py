@@ -62,7 +62,7 @@ else:
 #         self.counter = 0  # for recording data from the muscles
 #
 #     # @profile
-#     def apply_torques(self, system, time: np.float = 0.0):
+#     def apply_torques(self, system, time: np.float64 = 0.0):
 #         # Compute the torque profile for this time-step, controller might change
 #         # the active and deactive splines.
 #         instantaneous_activation = np.hstack((self.activation(time)))

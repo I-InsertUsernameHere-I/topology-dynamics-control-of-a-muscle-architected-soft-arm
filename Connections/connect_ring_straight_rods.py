@@ -299,10 +299,10 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         # ring-straight rod connection and different than avg_contact_force_mag_in_plane.
         self.avg_contact_force_in_plane = np.zeros((3, second_sys_idx.shape[0]))
 
-        avg_in = np.array(avg_list_in, dtype=np.int6464)
-        avg_out = np.array(avg_list_out, dtype=np.int6464) + len(list(set(avg_list_in)))
-        avg_in_idx = np.array(avg_list_in_idx, dtype=np.int6464)
-        avg_out_idx = np.array(avg_list_out_idx, dtype=np.int6464)
+        avg_in = np.array(avg_list_in, dtype=np.int64)
+        avg_out = np.array(avg_list_out, dtype=np.int64) + len(list(set(avg_list_in)))
+        avg_in_idx = np.array(avg_list_in_idx, dtype=np.int64)
+        avg_out_idx = np.array(avg_list_out_idx, dtype=np.int64)
         avg_in_out = np.hstack((avg_in, avg_out))
         avg_in_out_idx = np.hstack((avg_in_idx, avg_out_idx))
 
@@ -310,11 +310,11 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         # connections ring rod make with straight rods. Our goal is to find system idx of each ring rod and number of
         # occurances in avg_in_out array.
         values, counts = np.unique(avg_in_out, return_counts=True)
-        self.n_connection_rod_two = np.zeros((second_sys_idx.shape[0]), dtype=np.int6464)
+        self.n_connection_rod_two = np.zeros((second_sys_idx.shape[0]), dtype=np.int64)
 
         # Each element of avg_contact_force_mag_in_plane array corresponds to a ring rod. avg_contact_idx contains the
         # element indexes of ring rods on avg_contact_force_mag_in_plane.
-        self.avg_contact_idx = np.zeros(second_sys_idx.shape[0], dtype=np.int6464)
+        self.avg_contact_idx = np.zeros(second_sys_idx.shape[0], dtype=np.int64)
         for i in range(avg_in_out_idx.shape[0]):
             self.avg_contact_idx[avg_in_out_idx[i]] = int(
                 np.where(values == avg_in_out[i])[0][0]
@@ -328,8 +328,8 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
 
         self.post_processing_dict_list = kwargs.get("post_processing_dict", [None])[0]
         self.step_skip = kwargs.get("step_skip", 0)[0]
-        self.first_sys_idx = np.array(kwargs.get("first_sys_idx"), dtype=np.int6464)
-        self.second_sys_idx = np.array(kwargs.get("second_sys_idx"), dtype=np.int6464)
+        self.first_sys_idx = np.array(kwargs.get("first_sys_idx"), dtype=np.int64)
+        self.second_sys_idx = np.array(kwargs.get("second_sys_idx"), dtype=np.int64)
         self.counter = 0
 
     def apply_forces(self, rod_one, index_one, rod_two, index_two):

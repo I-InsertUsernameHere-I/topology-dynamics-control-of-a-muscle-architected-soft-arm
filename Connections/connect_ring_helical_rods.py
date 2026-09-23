@@ -338,7 +338,7 @@ class RingHelicalRodJoint(FreeJoint):
 
         # Distance vector between connection nodes of rods two and one.
         distance_vector = surface_point_rod_two - surface_point_rod_one
-        np.round_(distance_vector, 12, distance_vector)
+        np.round(distance_vector, 12, distance_vector)
 
         # Compute the connection spring force
         spring_force = k * distance_vector
