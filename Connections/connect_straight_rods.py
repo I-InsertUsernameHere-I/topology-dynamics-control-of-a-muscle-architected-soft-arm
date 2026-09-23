@@ -81,8 +81,8 @@ class SurfaceJointSideBySide(FreeJoint):
         self.k_repulsive = np.array(k_repulsive)
 
         self.offset_btw_rods = np.array(offset_btw_rods)
-        self.contact_force_index_one = np.array(contact_force_rod_one_idx, dtype=np.int)
-        self.contact_force_index_two = np.array(contact_force_rod_two_idx, dtype=np.int)
+        self.contact_force_index_one = np.array(contact_force_rod_one_idx, dtype=np.int64)
+        self.contact_force_index_two = np.array(contact_force_rod_two_idx, dtype=np.int64)
         self.total_contact_force = total_contact_force[0]
         self.total_contact_force_mag = total_contact_force_mag[0]
 

@@ -191,7 +191,7 @@ def get_connection_order_and_angle(
             ),
             rod_two_perpendicular_direction_vec.reshape(3, 1),
         ).reshape(3)
-        np.round_(target_tangent_direction, 12, target_tangent_direction)
+        np.round(target_tangent_direction, 12, target_tangent_direction)
 
         # If we cannot generate the rod_one_tangent by rotating target_tangent_direction, then we should perform
         # rotation in opposite direction, so multiply angle_btw_straight_ring_rods_sign by -1.
@@ -242,13 +242,13 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         super().__init__(np.array(k), np.array(nu))
         self.kt = np.array(kt)
         self.k_repulsive = np.array(k_repulsive)
-        self.surface_pressure_idx = np.array(surface_pressure_idx, dtype=np.int)
+        self.surface_pressure_idx = np.array(surface_pressure_idx, dtype=np.int64)
         self.connection_order = np.array(connection_order)
         self.angle_btw_straight_ring_rods = np.array(angle_btw_straight_ring_rods)
-        self.index_two_opposite_side = np.array(index_two_opposite_side, dtype=np.int)
-        self.index_two_hing_side = np.array(index_two_hing_side, dtype=np.int)
+        self.index_two_opposite_side = np.array(index_two_opposite_side, dtype=np.int64)
+        self.index_two_hing_side = np.array(index_two_hing_side, dtype=np.int64)
         self.index_two_hinge_opposite_side = np.array(
-            index_two_hinge_opposite_side, dtype=np.int
+            index_two_hinge_opposite_side, dtype=np.int64
         )
         # Hinge direction vector is perpendicular to the connection vector and they are on the same plane.
         self.hinge_direction_vector = np.zeros((3, self.index_two_hing_side.shape[0]))
@@ -259,12 +259,12 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         self.total_contact_force = total_contact_force[0]
         self.total_contact_force_mag = total_contact_force_mag[0]
 
-        second_sys_idx_offset = np.array(kwargs["second_sys_idx_offset"], dtype=np.int)
+        second_sys_idx_offset = np.array(kwargs["second_sys_idx_offset"], dtype=np.int64)
         self.index_two_opposite_side += second_sys_idx_offset
         self.index_two_hing_side += second_sys_idx_offset
         self.index_two_hinge_opposite_side += second_sys_idx_offset
 
-        second_sys_idx = np.array(kwargs["second_sys_idx"], dtype=np.int)
+        second_sys_idx = np.array(kwargs["second_sys_idx"], dtype=np.int64)
 
         # We average the contact forces magnitude applied on the ring rod.
         # contact_forces array elements order is the same as the straight rod element order. So we need to find the
@@ -299,10 +299,10 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         # ring-straight rod connection and different than avg_contact_force_mag_in_plane.
         self.avg_contact_force_in_plane = np.zeros((3, second_sys_idx.shape[0]))
 
-        avg_in = np.array(avg_list_in, dtype=np.int64)
-        avg_out = np.array(avg_list_out, dtype=np.int64) + len(list(set(avg_list_in)))
-        avg_in_idx = np.array(avg_list_in_idx, dtype=np.int64)
-        avg_out_idx = np.array(avg_list_out_idx, dtype=np.int64)
+        avg_in = np.array(avg_list_in, dtype=np.int6464)
+        avg_out = np.array(avg_list_out, dtype=np.int6464) + len(list(set(avg_list_in)))
+        avg_in_idx = np.array(avg_list_in_idx, dtype=np.int6464)
+        avg_out_idx = np.array(avg_list_out_idx, dtype=np.int6464)
         avg_in_out = np.hstack((avg_in, avg_out))
         avg_in_out_idx = np.hstack((avg_in_idx, avg_out_idx))
 
@@ -310,11 +310,11 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         # connections ring rod make with straight rods. Our goal is to find system idx of each ring rod and number of
         # occurances in avg_in_out array.
         values, counts = np.unique(avg_in_out, return_counts=True)
-        self.n_connection_rod_two = np.zeros((second_sys_idx.shape[0]), dtype=np.int64)
+        self.n_connection_rod_two = np.zeros((second_sys_idx.shape[0]), dtype=np.int6464)
 
         # Each element of avg_contact_force_mag_in_plane array corresponds to a ring rod. avg_contact_idx contains the
         # element indexes of ring rods on avg_contact_force_mag_in_plane.
-        self.avg_contact_idx = np.zeros(second_sys_idx.shape[0], dtype=np.int64)
+        self.avg_contact_idx = np.zeros(second_sys_idx.shape[0], dtype=np.int6464)
         for i in range(avg_in_out_idx.shape[0]):
             self.avg_contact_idx[avg_in_out_idx[i]] = int(
                 np.where(values == avg_in_out[i])[0][0]
@@ -328,8 +328,8 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
 
         self.post_processing_dict_list = kwargs.get("post_processing_dict", [None])[0]
         self.step_skip = kwargs.get("step_skip", 0)[0]
-        self.first_sys_idx = np.array(kwargs.get("first_sys_idx"), dtype=np.int64)
-        self.second_sys_idx = np.array(kwargs.get("second_sys_idx"), dtype=np.int64)
+        self.first_sys_idx = np.array(kwargs.get("first_sys_idx"), dtype=np.int6464)
+        self.second_sys_idx = np.array(kwargs.get("second_sys_idx"), dtype=np.int6464)
         self.counter = 0
 
     def apply_forces(self, rod_one, index_one, rod_two, index_two):
@@ -480,7 +480,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
             - rod_two_position_collection[:, index_two_hinge_opposite_side]
         )
         hinge_direction_vector /= _batch_norm(hinge_direction_vector)
-        np.round_(hinge_direction_vector[:], 12, hinge_direction_vector[:])
+        np.round(hinge_direction_vector[:], 12, hinge_direction_vector[:])
         # Second compute in plane torques. These torques are restricting the relative position of rod one and
         # rod two in plane. Rod_spring_connection_vec and hinge_direction_vec divides the ring rod 4 equal
         # quadrants and they are perpendicular to each other on the same plane. Cross-product of these two
@@ -514,7 +514,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         # Distance vector between connection nodes of rods two and one.
         # distance_vector = surface_point_rod_two - surface_point_rod_one
         distance_vector = surface_point_rod_one - surface_point_rod_two
-        np.round_(distance_vector, 12, distance_vector)
+        np.round(distance_vector, 12, distance_vector)
 
         in_plane_distance = (
             rod_one_element_position - rod_two_position_collection[:, index_two]
@@ -528,7 +528,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
             / (rod_one_radius[index_one] + rod_two_radius[index_two])
             - 1
         )
-        np.round_(penetration_strain, 12, penetration_strain)
+        np.round(penetration_strain, 12, penetration_strain)
         idx_penetrate = np.where(penetration_strain < 0)[0]
         k_contact = np.zeros(index_one.shape)
         k_contact_temp = k_repulsive * np.abs(penetration_strain)
@@ -717,7 +717,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         #         - rod_two_position_collection[:, index_two_hinge_opposite_side]
         # )
         # # hinge_direction_vec = -difference_kernel_for_block_structure(rod_two_tangents, ghost_elems_idx)[:,index_two_hing_side]
-        # # np.round_(direction_hinge, 12, direction_hinge)
+        # # np.round(direction_hinge, 12, direction_hinge)
         # hinge_direction_vec /= _batch_norm(hinge_direction_vec)
 
         link_direction = (
@@ -728,7 +728,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
         force_direction = (
             -_batch_dot(link_direction, hinge_direction_vector) * hinge_direction_vector
         )
-        np.round_(force_direction, 12, force_direction)
+        np.round(force_direction, 12, force_direction)
         torque_hinge = kt * _batch_cross(link_direction / 2, force_direction)
 
         # Second compute in plane torques. These torques are restricting the relative position of rod one and
@@ -756,7 +756,7 @@ class OrthogonalRodsSideBySideJoint(FreeJoint):
             * (rod_one_radius[index_one] + rod_two_radius[index_two])
         ) + (0.5 * rod_one_lengths[index_one] * target_tangent_direction)
         torque_force = target_position - current_position
-        np.round_(torque_force, 12, torque_force)
+        np.round(torque_force, 12, torque_force)
         torque_constrain_orientation = kt * _batch_cross(
             link_direction / 2, torque_force
         )

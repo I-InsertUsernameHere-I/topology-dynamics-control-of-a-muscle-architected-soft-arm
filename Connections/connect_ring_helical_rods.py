@@ -246,31 +246,31 @@ class RingHelicalRodJoint(FreeJoint):
         """
         super().__init__(np.array(k), np.array(nu))
         # self.kt = np.array(kt)
-        self.connection_order = np.array(connection_order, dtype=np.int)
+        self.connection_order = np.array(connection_order, dtype=np.int64)
 
-        second_sys_idx_offset = np.array(kwargs["second_sys_idx_offset"], dtype=np.int)
+        second_sys_idx_offset = np.array(kwargs["second_sys_idx_offset"], dtype=np.int64)
         self.index_two_opposite_side = (
-            np.array(index_two_opposite_side, dtype=np.int) + second_sys_idx_offset
+            np.array(index_two_opposite_side, dtype=np.int64) + second_sys_idx_offset
         )
         self.index_two_hinge_side = (
-            np.array(index_two_hing_side, dtype=np.int) + second_sys_idx_offset
+            np.array(index_two_hing_side, dtype=np.int64) + second_sys_idx_offset
         )
         self.index_two_hinge_opposite_side = (
-            np.array(index_two_hinge_opposite_side, dtype=np.int)
+            np.array(index_two_hinge_opposite_side, dtype=np.int64)
             + second_sys_idx_offset
         )
         self.next_connection_index = (
-            np.array(next_connection_index, dtype=np.int) + second_sys_idx_offset
+            np.array(next_connection_index, dtype=np.int64) + second_sys_idx_offset
         )
         self.next_connection_index_opposite = (
-            np.array(next_connection_index_opposite, dtype=np.int)
+            np.array(next_connection_index_opposite, dtype=np.int64)
             + second_sys_idx_offset
         )
         self.ring_rod_start_idx = (
-            np.array(ring_rod_start_idx, dtype=np.int) + second_sys_idx_offset
+            np.array(ring_rod_start_idx, dtype=np.int64) + second_sys_idx_offset
         )
         self.ring_rod_end_idx = (
-            np.array(ring_rod_end_idx, dtype=np.int) + second_sys_idx_offset
+            np.array(ring_rod_end_idx, dtype=np.int64) + second_sys_idx_offset
         )
 
     def apply_forces(self, rod_one, index_one, rod_two, index_two):
